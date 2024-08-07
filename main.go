@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"net/http"
+	"os"
+)
 
 func main() {
-	fmt.Println("hello world")
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hi from golang"))
+	})
+
+	http.ListenAndServe(":"+os.Getenv("PORT"), mux)
 }
