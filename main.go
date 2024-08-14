@@ -41,7 +41,7 @@ func main() {
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 		} else {
-			w.Header().Set("Content-Disposition", "attachment; filename="+vid.Title+".mp3")
+			w.Header().Set("Content-Disposition", `attachment; filename="`+vid.Title+`".mp3`)
 			w.Header().Set("Content-Type", "audio/mp3")
 			w.Write(vid.Buffer)
 		}
