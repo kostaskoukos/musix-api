@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/kkdai/youtube/v2"
 )
@@ -39,13 +40,15 @@ func main() {
 	mux.Handle("GET /", http.FileServer(http.Dir("public")))
 
 	mux.HandleFunc("GET /dl", func(w http.ResponseWriter, r *http.Request) {
-		vid, err := DlSong(r.FormValue("id"))
+		_, id, _ := strings.Cut(r.FormValue("url"), "v=")
+
+		vid, err := DlSong(id)
 		if err != nil {
-			http.Error(w, err.Error(), 500)
+			http.Error(w, "Something went wrong while donwloading this song. Please try again", 500)
 			return
 		}
 
-		w.Header().Set("Content-Disposition", `attachment; filename="`+vid.Title+`".mp3`)
+		w.Header().Set("Content-Disposition", `attachment; filename="`+vid.Title+`.mp3"`)
 		w.Header().Set("Content-Type", "audio/mp3")
 		w.Write(vid.Buffer)
 	})
