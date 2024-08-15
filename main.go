@@ -36,8 +36,8 @@ func DlSong(id string) (*Video, error) {
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /{id}", func(w http.ResponseWriter, r *http.Request) {
-		vid, err := DlSong(r.PathValue("id"))
+	mux.HandleFunc("GET /dl", func(w http.ResponseWriter, r *http.Request) {
+		vid, err := DlSong(r.FormValue("id"))
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
