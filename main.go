@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -35,6 +36,10 @@ func DlSong(id string) (*Video, error) {
 }
 
 func main() {
+	if _, err := os.Stat("public/index.html"); os.IsNotExist(err) {
+		panic(err)
+	}
+
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /", http.FileServer(http.Dir("public")))
@@ -60,5 +65,6 @@ func main() {
 		port += "3000"
 	}
 
+	fmt.Println("Listening on port " + port)
 	http.ListenAndServe(port, mux)
 }
