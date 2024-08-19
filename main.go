@@ -53,5 +53,12 @@ func main() {
 		w.Write(vid.Buffer)
 	})
 
-	http.ListenAndServe(":"+os.Getenv("PORT"), mux)
+	port := ":"
+	if p, _ := os.LookupEnv("PORT"); p != "" {
+		port += p
+	} else {
+		port += "3000"
+	}
+
+	http.ListenAndServe(port, mux)
 }
