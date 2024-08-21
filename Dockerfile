@@ -12,8 +12,10 @@ RUN --mount=type=bind,target=. \
 
 FROM scratch AS final
 WORKDIR /bin
+
 COPY ./public ./public/
 COPY --from=build /bin/server ./
+COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 EXPOSE 3000
 ENTRYPOINT [ "/bin/server" ]
