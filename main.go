@@ -16,6 +16,7 @@ type Video struct {
 }
 
 func DlSong(id string) (*Video, error) {
+	fmt.Println("Downloading video id:", id)
 	client := youtube.Client{}
 
 	video, err := client.GetVideo(id)
@@ -45,11 +46,13 @@ func main() {
 	mux.Handle("GET /", http.FileServer(http.Dir("public")))
 
 	mux.HandleFunc("GET /dl", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("GET ", r.URL.RawPath)
 		_, id, _ := strings.Cut(r.FormValue("url"), "v=")
 
 		vid, err := DlSong(id)
 		if err != nil {
-			http.Error(w, "Something went wrong while donwloading this song. Please try again", 500)
+			fmt.Println("Error from downloader:", err)
+			http.Error(w, "Something went wrong while downloading this song. Please try again", 500)
 			return
 		}
 
