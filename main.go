@@ -25,7 +25,7 @@ func DlSong(id string) (*Video, error) {
 	}
 
 	formats := video.Formats.WithAudioChannels()
-	stream, _, err := client.GetStream(video, &formats[0])
+	stream, _, err := client.GetStream(video, &formats.Itag(140)[0])
 	if err != nil {
 		return nil, err
 	}
